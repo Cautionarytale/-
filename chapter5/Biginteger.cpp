@@ -9,8 +9,8 @@ struct BigInteger {
   static const int WIDTH = 8;
   vector<int> s;
 
-  BigInteger(long long num = 0) { *this = num; } // ¹¹Ôìº¯Êı
-  BigInteger operator = (long long num) { // ¸³ÖµÔËËã·û
+  BigInteger(long long num = 0) { *this = num; } // æ„é€ å‡½æ•°
+  BigInteger operator = (long long num) { // èµ‹å€¼è¿ç®—ç¬¦
     s.clear();
     do {
       s.push_back(num % BASE);
@@ -18,13 +18,13 @@ struct BigInteger {
     } while(num > 0);
     return *this;
   }
-  BigInteger operator = (const string& str) { // ¸³ÖµÔËËã·û
+  BigInteger operator = (const string& str) { // èµ‹å€¼è¿ç®—ç¬¦
     s.clear();
     int x, len = (str.length() - 1) / WIDTH + 1;
     for(int i = 0; i < len; i++) {
-      int end = str.length() - i*WIDTH;
+      int end = str.length() - i*WIDTH; 
       int start = max(0, end - WIDTH);
-      sscanf(str.substr(start, end-start).c_str(), "%d", &x);
+      sscanf(str.substr(start, end-start).c_str(), "%d", &x);//å­ä¸²ä»startå¼€å§‹ï¼Œé•¿åº¦ä¸ºwidthï¼Œä¸å«end 
       s.push_back(x);
     }
     return *this;
@@ -142,15 +142,10 @@ BigInteger operator * (const BigInteger& b) const
     for (int i = 0; i < s.size(); ++i)
         for (int j = 0; j < b.s.size(); ++j)
         {
-            c.s[i + j + 1] += c.s[i + j] / BASE;
+        	c.s[i + j] += s[i] * b.s[j];
+            c.s[i + j + 1] += c.s[i + j] / BASE;//è¿›ä½ 
             c.s[i + j] %= BASE;
-            c.s[i + j] += s[i] * b.s[j];
         }
-    for (int i = 0; i < (MAX * 2 + 1); ++i)
-    {
-        c.s[i + 1] += c.s[i] / BASE;
-        c.s[i] %= BASE;
-    }
     while (!*(c.s.end() - 1))
         c.s.erase(c.s.end() - 1);
     return c;
@@ -244,8 +239,10 @@ istream& operator >> (istream &in, BigInteger& x) {
 }
 int main()
 {
+	//BigInteger a(1234567890);
 	BigInteger a(1234567890);
+	BigInteger b(1234567890);
+	a*=b;
 	cout<<a<<endl;
 	return 0;
 }
-
